@@ -27,19 +27,21 @@ def root():
 
 # The idea is to create a crud to manage the posts...
 
-@app.get('/posts/<int:id>/') # This is a path parameter.
-@app.get('/posts/')
-def getPost(id=None):
-    if id:
-        if ((id <= 0) or (id != int(id))):
-            return {'message': 'Invalid ID'}, 400
-        for post in myPosts:
-            if post.get('id') == id:
-                return {'data': post}
-        return {'message': 'Post not found'}, 404
+@app.get('/posts')
+def getPosts():
     return myPosts
 
-@app.route('/posts/<path:id>')
+@app.get('/posts/<int:id>/') # This is a path parameter.
+def getPost(id):
+    if ( (id <= 0) or (not(id)) ):
+        return {'message': 'Invalid ID'}, 400
+
+    for post in myPosts:
+        if post.get('id') == id:
+            return {'data': post}, 200
+    return {'message': 'Post not found'}, 404
+
+@app.get('/posts/<path:id>')
 def handle_invalid_param(id):
     return {"error": "Invalid path parameter", "message": f"'{id}' is not a valid integer for post ID."}, 422 
 
