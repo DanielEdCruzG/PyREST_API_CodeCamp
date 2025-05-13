@@ -22,6 +22,8 @@ class PostSchema(Schema):
             raise ValidationError('Content must be at most 250 characters long')
         
     def validate_rating(self, data):
+        if data is None:
+            return
         if data < 1:
             raise ValidationError('Rating must be at least 1')
         if data > 5:

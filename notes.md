@@ -20,10 +20,10 @@ There're four types:
 - Public: It's available to any outside developer or business. Generally involves an strategy to share its aplications data with other business.
 - Partner:It's available to speccifically selected and authorized outside developers or consumers
 - Private: Also called "Internal APIS" is intended only for use within the enterprise to connect systems and data within the bussiness.
-- Composite: Generally combine 2 or more APIS to craft a sequuence of related or interdependent operations.
+- Composite: Generally combine 2 or more APIS to craft a sequence of related or interdependent operations.
 
 ### API Protocols and Architectures
-Today there are 3 categories of API protocols or architectures:
+Today there are 3 (Main) categories of API protocols or architectures:
 1. *REST*: REpresentational State Tranfer(The type of API we're making).
 2. *RPC*: Remote Procedural Call. 
 3. *SOAP*: Simple Object Access Protocol.
@@ -32,9 +32,14 @@ Today there are 3 categories of API protocols or architectures:
 Relies on a client/server approach that separates foront and back ends. Furthermore is stateless (That means that doesn't store the state of the petition), supports caching.
 
 #### RPC
+RPC stays for: Remote Procedure Call 
+Is a method of enabling communication and interaction between programs running on different computers or systems within a network. It facilitates a client-server model where one program (the client) can request a service or function from another program (the server) located on a remote machine
+
+_*Soooo... Basically*_
 Just send multiple parameters and receive results. Not only that, they invoke executable actions or processes and employ 2 different languages JSON and XML, for coding.
 
 #### SOAP
+SOAP stays for: Simple Object Access Protocol
 This architecture is highly structured, tightly controlled and clearly define standard.
 
 ##### Image
@@ -44,11 +49,11 @@ This architecture is highly structured, tightly controlled and clearly define st
 
 > And there're a long list of more and more HTTP methods (Over 30), but many of these protocols are used by alternate protocols such as WebDAV, most API developers use in principle the five most commonly used HTTP methods. 
 
-### A quick overview about WebDAV
+##### A quick overview about WebDAV
 First of all, let's define what WebDav means... Web-base Distributed Authoring and Versioning, is a protocol that take charge of the storage, editing, copy, move and share files from web servers. (This sound to me like drive).
 
 This could work like a Samba Server? (IDK what that means) or a FTP.
-#### What's SAMBA??? 
+###### What's SAMBA??? 
 Well it appear that first is important to know about the SMB Server Message Block protocol, to make it easy is a protocol to communicate the client with the server and vicerversa. In the beggining was though to connect the windows clients with Linux Servers. And this is the replacement of the CIFS Common Internet File System. There's another one asking to join... NFS Network File System this are used mostly in Linux and Unix OS. 
 Knowing that is clear to say that samba is a SMB *PLATFORM* that allows differents types of clients to make requests to the server.
 
