@@ -15,7 +15,7 @@ myPosts = [{'title': 'Post 1', 'content': 'This is the content of the post 1', '
 # This is a Decorator: Basically gets the 
 # function and do all the stuff to make 
 # it work. But the decorator keep in mind 
-# the methods HTTP. Ex: get, post, put ...
+# the methods 8HTTP. Ex: get, post, put ...
 
 @app.get('/') 
 def root():
@@ -142,4 +142,4 @@ def deletePost(id):
 
 @app.delete('/posts/<path:id>')
 def handleInvalidParamToDelete(id):
-    return {"error": "Invalid path parameter", "message": f"'{id}' is not a valid integer for post ID."}, 422 
+    return {"error": "Invalid path parameter", "message": f"'{id}' is not a valid integer for post ID."}, 422

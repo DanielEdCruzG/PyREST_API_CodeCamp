@@ -1,13 +1,13 @@
-from marshmallow import ValidationError, fields, Schema, EXCLUDE
+from marshmallow import ValidationError, fields, Schema, EXCLUDE, RAISE
 
 class PostSchema(Schema):
     title = fields.Str(required=True)
     content = fields.Str(required=True)
-    publish = fields.Bool(required=False, default=True)
-    rating = fields.Int(required=False, missing=None)
+    publish = fields.Bool(required=False, dump_default=False)
+    rating = fields.Int(required=False)
 
     class Meta:
-        unknown = EXCLUDE
+        unknown = RAISE
 
     def validate_title(self, data):
         if len(data) < 10:
