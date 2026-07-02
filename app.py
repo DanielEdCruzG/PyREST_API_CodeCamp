@@ -9,8 +9,23 @@ def findPost(id):
             return post
     return None
 
+def updatePost(dict, oldDict):
+    for key, value in dict.items():
+        if key in oldDict:  # solo si el campo existe
+            oldDict[key] = value
+
 # This is a list of dictionaries.
-myPosts = [{'title': 'Post 1', 'content': 'This is the content of the post 1', 'rating': 5, 'publish': True, 'id': 1}, {'title': 'Post 2', 'content': 'This is the content of the post 2', 'rating': 4, 'publish': False, 'id': 2}]
+myPosts = [
+    {
+        'title': 'Post 1', 'content': 'This is the content of the post 1', 'rating': 5, 'publish': True, 'id': 1
+    }, 
+    {
+        'title': 'Post 2', 'content': 'This is the content of the post 2', 'rating': 4, 'publish': False, 'id': 2
+    },
+    {
+        'title': 'Post 3', 'content': 'This is the content of the post 3', 'rating': 3, 'publish': True, 'id': 3
+    }
+    ]
 
 # This is a Decorator: Basically gets the 
 # function and do all the stuff to make 
@@ -36,12 +51,11 @@ def root():
 
 @app.get('/posts/')
 def getPosts():
-    # auxList = []
-    # for post in myPosts:
-        # if post.get('publish') == True:
-            # auxList.append(post)
-    # return auxList, 200
-    return myPosts, 200
+    auxList = []
+    for post in myPosts:
+        if post.get('publish') == True:
+            auxList.append(post)
+    return auxList, 200
 
 @app.get('/posts/<int:id>/') # This is a path parameter.
 def getPost(id):    
@@ -60,25 +74,21 @@ def handle_invalid_param(id):
 
 @app.post('/posts/') 
 def createPost():
-    payload = request.get_json()
+    infoFrontend = request.get_json()
     postSchema = PostSchema()
-    try:
-        postSchema.load(payload)
-        postSchema.validate_title(payload.get('title'))
-        postSchema.validate_content(payload.get('content'))
-        postSchema.validate_rating(payload.get('rating'))
-        dumpData = postSchema.dump(payload)
 
-        dumpData['id'] = len(myPosts) + 1
-        myPosts.append(dumpData)
-        
-        if not(dumpData.get('publish')):
-            return {'data': dumpData, 'message': 'Post eraser created successfully. '}, 202
+    postSchema.load(infoFrontend)
+    postSchema.validate_title(infoFrontend.get('title'))
+    postSchema.validate_content(infoFrontend.get('content'))
+    postSchema.validate_rating(infoFrontend.get('rating'))
 
-        return {'data': dumpData, 'message': 'Post Created Successfully!. '}, 201
-    
-    except Exception as e:
-        return {'error': f"An expetion error raise and the except block is running. The error is: {str(e)}"}, 500
+    infoFrontend['id'] = len(myPosts) + 1
+    myPosts.append(infoFrontend)
+       
+    if not(infoFrontend.get('publish')):
+        return {'data': infoFrontend, 'message': 'Post eraser created successfully. '}, 202
+
+    return {'data': infoFrontend, 'message': 'Post Created Successfully!. '}, 201
 
 # What's the difference between PUT and PATCH?... 
 # Well when you use the PUT method you must pass all the information
@@ -90,36 +100,28 @@ def handleInvalidParamToPost(AdditionalParam):
 
 @app.put('/posts/<int:id>/')
 def updateFullPost(id):
-    payload = request.get_json()
+    infoFrontend = request.get_json()
     postSchema = PostSchema()
 
-    try:
-        postSchema.load(payload)
-        postSchema.validate_title(payload.get('title'))
-        postSchema.validate_content(payload.get('content'))
-        postSchema.validate_rating(payload.get('rating'))
+    postSchema.load(infoFrontend)
+    postSchema.validate_title(infoFrontend.get('title'))
+    postSchema.validate_content(infoFrontend.get('content'))
+    postSchema.validate_rating(infoFrontend.get('rating'))
 
-        dumpData = postSchema.dump(payload)
+    if not(infoFrontend.get('publish')):
+        return {'data': infoFrontend, 'message': 'Post eraser created. '}, 202
 
-        if not(dumpData.get('publish')):
-            return {'data': dumpData, 'message': 'Post eraser created. '}, 202
+    postToUpdate = findPost(id)
 
-        findedPost = findPost(id)
-        if findedPost:
-            dumpData['id'] = id
-            findedPost = dumpData
-            return {'data': dumpData, 'message': 'Post Updated Successfully!. '}, 200
+    if postToUpdate:        
+        updatePost(infoFrontend, postToUpdate)
+        return {'data': infoFrontend, 'message': 'Post Updated Successfully!. '}, 200
 
-        return {'message': 'Post not found'}, 404
-    
-    except Exception as e:
-        return {'error': f"An expetion error raise and the except block is running. The error is: {str(e)}"}, 500
+    return {'message': 'Post not found'}, 404
     
 @app.put('/posts/<path:id>')
 def handleInvalidParamToUpdate(id):
     return {"error": "Invalid path parameter", "message": f"'{id}' is not a valid integer for post ID."}, 422 
-
-
 
 @app.delete('/posts/<int:id>/')
 def deletePost(id):
